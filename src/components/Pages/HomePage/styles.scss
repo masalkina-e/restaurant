@@ -1,0 +1,80 @@
+$primary-color: #586456;
+$primary-text-color: #ffffff;
+$font-stack: 'Nunito', sans-serif;
+
+.inner {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.bg-hero {
+    background-image: linear-gradient(to right, #0d0d0d78 100%, transparent 100%), url('/images/gallery13.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+.bg-apps {
+    background-color: $primary-text-color;
+}
+
+.homepage {
+    min-height: 100vh;
+
+    &_hero {
+        color: $primary-text-color;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 282px 20px 160px;
+        gap: 20px;
+
+        &_title {
+            font: {
+                size: 50px;
+                weight: 700;
+            }
+            width: 70%;
+            line-height: 55px;
+        }
+
+        &_discription {
+            font: {
+                size: 23px;
+                weight: 500;
+            }
+            line-height: 26px;
+            width: 90%;
+        }
+    }
+
+    &_apps {
+        display: flex;
+        flex-direction: row;
+        padding: 70px 20px;
+
+        &_left {
+            width: calc(100%/2);
+            display: flex;
+            justify-content: flex-end;
+
+            &_logo {
+                height: 130px;
+                border-radius: 10px;
+                padding-right: 50px;
+            }
+        }
+
+        &_right {
+            width: calc(100%/2);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font: {
+                size: 20px;
+                weight: 600;
+            }
+        }
+    }
+
+}

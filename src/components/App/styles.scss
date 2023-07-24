@@ -1,0 +1,88 @@
+$primary-color: #586456;
+$primary-text-color: #ffffff;
+$font-stack: 'Nunito', sans-serif;
+
+.inner {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.bg-header {
+    background-color: $primary-color;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.header {
+    color: $primary-text-color;
+    font-family: $font-stack;
+    padding: 0 20px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    &_left {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    
+        &_logo {
+            width: 90px;
+            height: 90px;
+        }
+        &_title-blok {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0px;
+            gap: 6px;
+            justify-content: center;
+        }
+        &_title {
+            font: {
+                size: 32px;
+                weight: 600;
+            }
+        }
+    }
+
+    &_right {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        text-decoration: none;
+
+        &_nav {
+            text-decoration: none;
+            color: $primary-text-color;
+        }
+    }    
+}
+
+.footer {
+    background-color: #252121;
+    padding: 20px 40px;
+    font-size: 12px;
+    color: $primary-text-color;
+
+    &_flex {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        &_items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        &_align {
+            text-align: end;
+        }
+    }
+}
