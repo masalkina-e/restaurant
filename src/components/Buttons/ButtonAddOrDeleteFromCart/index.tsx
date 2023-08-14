@@ -3,41 +3,62 @@ import { DishesType, CartItemtype } from "components/App"
 import uuid4 from "uuid4"
 
 type Props = {
-    setCartItems:(cartItems:CartItemtype[]) => void
     addNewItemInCart:(cartItem:CartItemtype) => void
+    updateNewItemCart:(cartItem:CartItemtype) => void
+    deleteNewItemCart:(cartItem:CartItemtype) => void
     dish:DishesType
     cartItems:CartItemtype[]
-    id: string
 }
-function ButtonAddOrDeleteFromCart( {setCartItems, addNewItemInCart, dish, cartItems, id}: Props ) {
-    console.log(id)
+function ButtonAddOrDeleteFromCart( {addNewItemInCart, updateNewItemCart, deleteNewItemCart, dish, cartItems}: Props ) {
+    console.log(cartItems)
+    
+    const includedInCart = cartItems.find(cartItem => cartItem.foodItemId === dish.id)
 
     const onClickPlus = () => {
-        let count = 0
+        
+        if (includedInCart) {
+            const cartItem: CartItemtype = {
+                ...includedInCart,
+                quantity: includedInCart.quantity + 1
+            }
+            updateNewItemCart(cartItem)
 
-        const uniqID = uuid4()
-        const cartItem:CartItemtype = {
-            id: uniqID,
-            foodItemId: dish.id,
-            quantity: count++,
-            name: dish.name,
-            description : dish.description,
-            price: dish.price,
-            image: dish.image
+        } else {
+            const uniqID = uuid4()
+            const cartItem:CartItemtype = {
+                id: uniqID,
+                foodItemId: dish.id,
+                quantity: 1,
+                name: dish.name,
+                description : dish.description,
+                price: dish.price,
+                image: dish.image
+            }
+            addNewItemInCart(cartItem)
         }
-        addNewItemInCart(cartItem)
     }
 
-    const onClickMinus = (id: string) => {
-        const filtredCartItems = cartItems.filter(item => item.id != id)
-        setCartItems(filtredCartItems)
-
+    const onClickMinus = () => {
+        if (includedInCart) {
+            if (includedInCart.quantity > 1) {
+                const cartItem: CartItemtype = {
+                    ...includedInCart,
+                    quantity: includedInCart.quantity - 1
+                }
+                updateNewItemCart(cartItem)
+            } else {
+                deleteNewItemCart(includedInCart)
+            }
+        } else {
+            return
+        }
     }
 
     return(
         <div className="btn">
-            <button className='btn_action' onClick={() => onClickMinus(id)}>-</button>
-            <p>0</p>
+            <button className='btn_actions' onClick={() => onClickMinus()}>-</button>
+            <p>{includedInCart && includedInCart.quantity}</p>
+            <p>{!includedInCart && "0"}</p>
             <button className='btn_actions' onClick={() => onClickPlus()}>+</button>
         </div>
     )

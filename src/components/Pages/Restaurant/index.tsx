@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 import 'components/Pages/Restaurant/styles.scss';
 import DishCard from "components/DishCard";
 import { DishesType, CartItemtype } from "components/App"
+import { format } from "date-fns"
+import { ru } from "date-fns/locale"
 
 type RestaurantType = {
     name: string
@@ -19,12 +21,15 @@ type RestaurantType = {
 }
 
 type Props = {
-    addNewItemInCart: (cartItem:CartItemtype) => void
-    setCartItems: (cartItems:CartItemtype[]) => void
     cartItems: CartItemtype[]
+    addNewItemInCart: (cartItems:CartItemtype) => void
+    deleteNewItemCart: (cartItems:CartItemtype) => void
+    updateNewItemCart: (cartItems:CartItemtype) => void
+    dishes: DishesType[]
+    setDishes: (dish:DishesType[]) => void
 }
 
-function Restaurant( {addNewItemInCart, setCartItems, cartItems}: Props ) {
+function Restaurant( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewItemCart, dishes, setDishes}: Props ) {
     const { slug } = useParams()
 
     const [restaurant, setRestaurant] = useState<RestaurantType | null>(null)
@@ -79,12 +84,20 @@ function Restaurant( {addNewItemInCart, setCartItems, cartItems}: Props ) {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 icons">
                                 <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clipRule="evenodd" />
                             </svg>
-                            <p>9:00 - 16:00</p>
-                            {/* <p>{restaurant.openAt} - {restaurant.closeAt}</p> */}
+                            <p>
+                                {format(new Date(restaurant.openAt), "p")} - {format(new Date(restaurant.closeAt), "p")}
+                            </p>
                         </div>
                     </div>
                 </div>
-                <DishCard addNewItemInCart={addNewItemInCart} setCartItems={setCartItems} cartItems={cartItems}/>
+                <DishCard 
+                    addNewItemInCart={addNewItemInCart} 
+                    deleteNewItemCart={deleteNewItemCart} 
+                    updateNewItemCart={updateNewItemCart} 
+                    cartItems={cartItems}
+                    dishes={dishes}
+                    setDishes={setDishes}
+                />
                 
             </section>
         )

@@ -4,9 +4,18 @@ import 'components/Pages/Cart/styles.scss';
 
 type Props = {
     cartItems: CartItemtype[]
+    addNewItemInCart: (cartItems:CartItemtype) => void
+    deleteNewItemCart: (cartItems:CartItemtype) => void
+    updateNewItemCart: (cartItems:CartItemtype) => void
+    dishes: DishesType[]
 }
 
-function Cart( {cartItems}:Props ) {
+function Cart( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewItemCart, dishes}:Props ) {
+
+    // const dish:DishesType[] = dishes.map((i) => {
+    //     return i
+    // })
+
     return(
         <section className="cart inner">
             <p className="cart_title">Ваш заказ</p>
@@ -22,13 +31,13 @@ function Cart( {cartItems}:Props ) {
                                     </div>
                                     <p className="cart_cards_item_text_price">Price: {item.price} ₽</p>
 
-                                    {/* <ButtonAddToCart 
-                                        title="Добавить в корзину" 
-                                        dish={dish} 
-                                        addNewItemInCart={addNewItemInCart}
+                                    {/* <ButtonAddOrDeleteFromCart 
+                                        addNewItemInCart={addNewItemInCart} 
+                                        updateNewItemCart={updateNewItemCart}
+                                        dish={dish}
+                                        cartItems={cartItems}
+                                        deleteNewItemCart={deleteNewItemCart}
                                     /> */}
-
-                                    <ButtonAddOrDeleteFromCart id={item.id}/>
                                     
                                 </div>
                         </div>

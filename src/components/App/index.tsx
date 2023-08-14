@@ -30,7 +30,7 @@ function App() {
 
   const [cartItems, setCartItems] = useState<CartItemtype[]>(
     // JSON.parse(localStorage.getItem('items')!)
-  []
+    []
   )
   console.log(cartItems)
 
@@ -41,20 +41,44 @@ function App() {
   const addNewItemInCart = (cartItem:CartItemtype) => {
     const newItems = [...cartItems, cartItem]
     setCartItems(newItems)
+}
+
+  const deleteNewItemCart = (cartItem:CartItemtype) => {
+    const newItems = cartItems.filter(i => i.id !== cartItem.id)
+    setCartItems(newItems)
   }
 
-  // const deleteNewItemCart = (cartItem:CartItemtype) => {
-  //   const newItems = 
-  //   setCartItems(newItems)
-  // }
-  
+  const updateNewItemCart = (cartItem:CartItemtype) => {
+    const newItems = cartItems.filter(i => i.id !== cartItem.id)
+    setCartItems([...newItems, cartItem])
+  }
+
+  const [dishes, setDishes] = useState<DishesType[]>([])
+
   return (
     <BrowserRouter>
       <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/restaurant/:slug" element={<Restaurant addNewItemInCart={addNewItemInCart} setCartItems={setCartItems} cartItems={cartItems}/>} />
-          <Route path='/cart' element={<Cart cartItems={cartItems}/>} />
+          <Route path="/restaurant/:slug" element={
+            <Restaurant 
+              cartItems={cartItems} 
+              addNewItemInCart={addNewItemInCart} 
+              deleteNewItemCart={deleteNewItemCart} 
+              updateNewItemCart={updateNewItemCart}
+              dishes={dishes}
+              setDishes={setDishes}
+            />
+          }/>
+          <Route path='/cart' element={
+            <Cart 
+              cartItems={cartItems} 
+              addNewItemInCart={addNewItemInCart} 
+              deleteNewItemCart={deleteNewItemCart} 
+              updateNewItemCart={updateNewItemCart}
+              dishes={dishes}
+            />
+          }/>
         </Routes>
       <Footer />
     </BrowserRouter>

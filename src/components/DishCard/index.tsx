@@ -1,19 +1,21 @@
 import ButtonAddToCart from "components/Buttons/ButtonAddToCart"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { DishesType,CartItemtype } from "components/App";
+import { DishesType, CartItemtype } from "components/App";
 import ButtonAddOrDeleteFromCart from "components/Buttons/ButtonAddOrDeleteFromCart";
 
 type Props = {
     addNewItemInCart: (cartItem:CartItemtype) => void
-    setCartItems: (cartItems:CartItemtype[]) => void
+    deleteNewItemCart:  (cartItem:CartItemtype) => void
+    updateNewItemCart:  (cartItem:CartItemtype) => void
     cartItems: CartItemtype[]
+    dishes: DishesType[]
+    setDishes: (dish:DishesType[]) => void
 }
 
-function DishCard( {addNewItemInCart, setCartItems, cartItems}: Props) {
+function DishCard( {addNewItemInCart, deleteNewItemCart, updateNewItemCart, cartItems, dishes, setDishes}: Props) {
     const { slug } = useParams()
-    const [dishes, setDishes] = useState<DishesType[]>([])
-
+   
     useEffect(() => {
         loadDishes()
     }, [])
@@ -45,15 +47,17 @@ function DishCard( {addNewItemInCart, setCartItems, cartItems}: Props) {
                                     title="Добавить в корзину" 
                                     dish={dish} 
                                     addNewItemInCart={addNewItemInCart}
+                                    updateNewItemCart={updateNewItemCart}
+                                    cartItems={cartItems}
                                 />
 
                                 <ButtonAddOrDeleteFromCart 
-                                    setCartItems={setCartItems} 
                                     addNewItemInCart={addNewItemInCart} 
+                                    updateNewItemCart={updateNewItemCart}
                                     dish={dish}
                                     cartItems={cartItems}
+                                    deleteNewItemCart={deleteNewItemCart}
                                 />
-                                
                             </div> 
                         </div>
                     )
