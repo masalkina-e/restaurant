@@ -1,17 +1,16 @@
 import 'components/Buttons/ButtonAddOrDeleteFromCart/styles.scss';
-import { DishesType, CartItemtype } from "components/App"
+import { DishesType, CartItemtype, AppContext} from "components/App"
 import uuid4 from "uuid4"
+import { useContext } from 'react'
 
 type Props = {
-    addNewItemInCart:(cartItem:CartItemtype) => void
-    updateNewItemCart:(cartItem:CartItemtype) => void
-    deleteNewItemCart:(cartItem:CartItemtype) => void
     dish:DishesType
-    cartItems:CartItemtype[]
+    slug: string
 }
-function ButtonAddOrDeleteFromCart( {addNewItemInCart, updateNewItemCart, deleteNewItemCart, dish, cartItems}: Props ) {
-    console.log(cartItems)
-    
+function ButtonAddOrDeleteFromCart( { dish, slug }: Props ) {
+
+    const { addNewItemInCart, updateNewItemCart, deleteNewItemCart, cartItems } = useContext(AppContext)
+
     const includedInCart = cartItems.find(cartItem => cartItem.foodItemId === dish.id)
 
     const onClickPlus = () => {
@@ -29,6 +28,7 @@ function ButtonAddOrDeleteFromCart( {addNewItemInCart, updateNewItemCart, delete
                 id: uniqID,
                 foodItemId: dish.id,
                 quantity: 1,
+                restaurantSlug: slug,
                 name: dish.name,
                 description : dish.description,
                 price: dish.price,

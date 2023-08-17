@@ -1,20 +1,12 @@
 import ButtonAddToCart from "components/Buttons/ButtonAddToCart"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { DishesType, CartItemtype } from "components/App";
 import ButtonAddOrDeleteFromCart from "components/Buttons/ButtonAddOrDeleteFromCart";
 
-type Props = {
-    addNewItemInCart: (cartItem:CartItemtype) => void
-    deleteNewItemCart:  (cartItem:CartItemtype) => void
-    updateNewItemCart:  (cartItem:CartItemtype) => void
-    cartItems: CartItemtype[]
-    dishes: DishesType[]
-    setDishes: (dish:DishesType[]) => void
-}
-
-function DishCard( {addNewItemInCart, deleteNewItemCart, updateNewItemCart, cartItems, dishes, setDishes}: Props) {
-    const { slug } = useParams()
+function DishCard() {
+    const { slug } = useParams<string>()
+    const [dishes, setDishes] = useState<DishesType[]>([])
    
     useEffect(() => {
         loadDishes()
@@ -27,6 +19,7 @@ function DishCard( {addNewItemInCart, deleteNewItemCart, updateNewItemCart, cart
         const data = await response.json()   
         setDishes(data)
     }
+    console.log(dishes)
 
     return(
         <div className="res_menu inner">
@@ -46,17 +39,12 @@ function DishCard( {addNewItemInCart, deleteNewItemCart, updateNewItemCart, cart
                                 <ButtonAddToCart 
                                     title="Добавить в корзину" 
                                     dish={dish} 
-                                    addNewItemInCart={addNewItemInCart}
-                                    updateNewItemCart={updateNewItemCart}
-                                    cartItems={cartItems}
+                                    slug={slug}
                                 />
 
                                 <ButtonAddOrDeleteFromCart 
-                                    addNewItemInCart={addNewItemInCart} 
-                                    updateNewItemCart={updateNewItemCart}
                                     dish={dish}
-                                    cartItems={cartItems}
-                                    deleteNewItemCart={deleteNewItemCart}
+                                    slug={slug}
                                 />
                             </div> 
                         </div>

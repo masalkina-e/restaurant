@@ -4,7 +4,7 @@ import Header from 'components/Header';
 import Cart from 'components/Pages/Cart';
 import HomePage from 'components/Pages/HomePage';
 import Restaurant from 'components/Pages/Restaurant';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 export type DishesType = {
@@ -20,17 +20,31 @@ export type CartItemtype = {
   id: string;
   foodItemId: number;
   quantity: number;
+  restaurantSlug: string,
   name: string,
   description: string,
   price: number,
   image: string
 }
 
+type contextProps = {
+  cartItems: CartItemtype[],
+  addNewItemInCart: (cartItems:CartItemtype) => void,
+  deleteNewItemCart: (cartItems:CartItemtype) => void,
+  updateNewItemCart: (cartItems:CartItemtype) => void,
+}
+
+export const AppContext = createContext<contextProps>({
+  cartItems: [],
+  addNewItemInCart: () => {},
+  deleteNewItemCart: () => {},
+  updateNewItemCart: () => {}
+})
+
 function App() {
 
   const [cartItems, setCartItems] = useState<CartItemtype[]>(
-    // JSON.parse(localStorage.getItem('items')!)
-    []
+    localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')!) : []
   )
   console.log(cartItems)
 
@@ -41,7 +55,7 @@ function App() {
   const addNewItemInCart = (cartItem:CartItemtype) => {
     const newItems = [...cartItems, cartItem]
     setCartItems(newItems)
-}
+  }
 
   const deleteNewItemCart = (cartItem:CartItemtype) => {
     const newItems = cartItems.filter(i => i.id !== cartItem.id)
@@ -53,35 +67,25 @@ function App() {
     setCartItems([...newItems, cartItem])
   }
 
-  const [dishes, setDishes] = useState<DishesType[]>([])
+  const contextValue = {
+    cartItems: cartItems,
+    addNewItemInCart: addNewItemInCart,
+    deleteNewItemCart: deleteNewItemCart,
+    updateNewItemCart: updateNewItemCart
+  }
 
   return (
-    <BrowserRouter>
-      <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/restaurant/:slug" element={
-            <Restaurant 
-              cartItems={cartItems} 
-              addNewItemInCart={addNewItemInCart} 
-              deleteNewItemCart={deleteNewItemCart} 
-              updateNewItemCart={updateNewItemCart}
-              dishes={dishes}
-              setDishes={setDishes}
-            />
-          }/>
-          <Route path='/cart' element={
-            <Cart 
-              cartItems={cartItems} 
-              addNewItemInCart={addNewItemInCart} 
-              deleteNewItemCart={deleteNewItemCart} 
-              updateNewItemCart={updateNewItemCart}
-              dishes={dishes}
-            />
-          }/>
-        </Routes>
-      <Footer />
-    </BrowserRouter>
+    <AppContext.Provider value={contextValue}>
+      <BrowserRouter>
+        <Header />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/restaurant/:slug" element={<Restaurant />}/>
+            <Route path='/cart' element={<Cart />}/>
+          </Routes>
+        <Footer />
+      </BrowserRouter>
+    </AppContext.Provider>
   )
 }
 export default App;

@@ -1,16 +1,17 @@
 import 'components/Buttons/ButtonAddToCart/styles.scss'
-import { DishesType, CartItemtype } from "components/App"
+import { DishesType, CartItemtype, AppContext } from "components/App"
 import uuid4 from "uuid4"
+import { useContext } from 'react'
 
 type Props = {
     title: string
     dish: DishesType
-    addNewItemInCart: (cartItem:CartItemtype) => void
-    updateNewItemCart: (cartItem:CartItemtype) => void
-    cartItems:CartItemtype[]
+    slug: string
 }
 
-function ButtonAddToCart( {title, dish, addNewItemInCart, updateNewItemCart, cartItems}:Props ) {
+function ButtonAddToCart( {title, dish, slug}:Props ) {
+
+    const { addNewItemInCart, updateNewItemCart, cartItems } = useContext(AppContext)
 
     const addToCart = () => {
 
@@ -29,6 +30,7 @@ function ButtonAddToCart( {title, dish, addNewItemInCart, updateNewItemCart, car
                 id: uniqID,
                 foodItemId: dish.id,
                 quantity: 1,
+                restaurantSlug: slug,
                 name: dish.name,
                 description : dish.description,
                 price: dish.price,

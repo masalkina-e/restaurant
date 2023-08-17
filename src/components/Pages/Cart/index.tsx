@@ -1,26 +1,37 @@
-import { DishesType, CartItemtype } from "components/App"
+import { DishesType, CartItemtype, AppContext } from "components/App"
 import ButtonAddOrDeleteFromCart from "components/Buttons/ButtonAddOrDeleteFromCart";
 import 'components/Pages/Cart/styles.scss';
+import { useEffect, useState } from "react";
+import { useContext } from 'react'
 
-type Props = {
-    cartItems: CartItemtype[]
-    addNewItemInCart: (cartItems:CartItemtype) => void
-    deleteNewItemCart: (cartItems:CartItemtype) => void
-    updateNewItemCart: (cartItems:CartItemtype) => void
-    dishes: DishesType[]
-}
+function Cart() {
 
-function Cart( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewItemCart, dishes}:Props ) {
+    const { cartItems } = useContext(AppContext)
+    const [dishes, setDishes] = useState<DishesType[]>([])
 
-    // const dish:DishesType[] = dishes.map((i) => {
-    //     return i
-    // })
+    useEffect(() => {
+        loadDishes()
+    }, [])
+
+    const loadDishes = async () => {
+        const response = await fetch(
+        `https://www.bit-by-bit.ru/api/student-projects/restaurants/${cartItems[0].restaurantSlug}/items`
+        )
+        const data = await response.json()   
+        setDishes(data)
+    }
 
     return(
         <section className="cart inner">
             <p className="cart_title">Ваш заказ</p>
             <div className="cart_cards">
                 {cartItems.map((item, index) => {
+
+                    const dish:DishesType = dishes.find((i) => {
+                        return i.id === item.foodItemId
+                    })!
+                    // console.log(dish)
+
                     return(
                         <div key={item.name + index} className="cart_cards_item">
                             <img src={item.image} alt="" className="cart_cards_item_image"/>
@@ -31,20 +42,15 @@ function Cart( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewItemCar
                                     </div>
                                     <p className="cart_cards_item_text_price">Price: {item.price} ₽</p>
 
-                                    {/* <ButtonAddOrDeleteFromCart 
-                                        addNewItemInCart={addNewItemInCart} 
-                                        updateNewItemCart={updateNewItemCart}
+                                    <ButtonAddOrDeleteFromCart 
                                         dish={dish}
-                                        cartItems={cartItems}
-                                        deleteNewItemCart={deleteNewItemCart}
-                                    /> */}
+                                    />
                                     
                                 </div>
                         </div>
                     )
                 })}
             </div>
-            
         </section>
     )
 }

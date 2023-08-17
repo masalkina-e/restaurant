@@ -4,7 +4,6 @@ import 'components/Pages/Restaurant/styles.scss';
 import DishCard from "components/DishCard";
 import { DishesType, CartItemtype } from "components/App"
 import { format } from "date-fns"
-import { ru } from "date-fns/locale"
 
 type RestaurantType = {
     name: string
@@ -20,17 +19,8 @@ type RestaurantType = {
     image: string
 }
 
-type Props = {
-    cartItems: CartItemtype[]
-    addNewItemInCart: (cartItems:CartItemtype) => void
-    deleteNewItemCart: (cartItems:CartItemtype) => void
-    updateNewItemCart: (cartItems:CartItemtype) => void
-    dishes: DishesType[]
-    setDishes: (dish:DishesType[]) => void
-}
-
-function Restaurant( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewItemCart, dishes, setDishes}: Props ) {
-    const { slug } = useParams()
+function Restaurant() {
+    const { slug } = useParams<string>()
 
     const [restaurant, setRestaurant] = useState<RestaurantType | null>(null)
     
@@ -47,6 +37,7 @@ function Restaurant( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewI
         setRestaurant(data)
     }  
 
+    // не работает лоадер
     if(!restaurant) {
         return (
             <div>Loading...</div>
@@ -90,14 +81,7 @@ function Restaurant( {cartItems, addNewItemInCart, deleteNewItemCart, updateNewI
                         </div>
                     </div>
                 </div>
-                <DishCard 
-                    addNewItemInCart={addNewItemInCart} 
-                    deleteNewItemCart={deleteNewItemCart} 
-                    updateNewItemCart={updateNewItemCart} 
-                    cartItems={cartItems}
-                    dishes={dishes}
-                    setDishes={setDishes}
-                />
+                <DishCard />
                 
             </section>
         )
